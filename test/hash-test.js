@@ -140,3 +140,13 @@ describe( "Fingerprint" , function() {
 
 
 
+describe( "randomIdentifier()" , function() {
+	
+	it( "should create random identifier" , function() {
+		console.log( "ID length 1: " + hash.randomIdentifier( 1 ) ) ;
+		console.log( "ID length 3: " + hash.randomIdentifier( 3 ) ) ;
+		console.log( "ID length 5: " + hash.randomIdentifier( 5 ) ) ;
+		console.log( "ID length 8: " + hash.randomIdentifier( 8 ) ) ;
+	} ) ;
+} ) ;
+

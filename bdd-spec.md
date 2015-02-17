@@ -1,6 +1,11 @@
+ID length 1: j
+ID length 3: MuW
+ID length 5: EjpuB
+ID length 8: Rfbz28OR
 # TOC
    - [Base64](#base64)
    - [Fingerprint](#fingerprint)
+   - [randomIdentifier()](#randomidentifier)
 <a name=""></a>
  
 <a name="base64"></a>
@@ -67,5 +72,16 @@ expect( hash.fingerprint( {
 
 expect( hash.fingerprint( [1,2,3] ) ).to.be( '8eRvMo5t7NVsZN1edh3Ctw' ) ;
 expect( hash.fingerprint( [ 'one' , 'two' , 'three' ] ) ).to.be( '54iNs6qLk1eoz57dmYp4kA' ) ;
+```
+
+<a name="randomidentifier"></a>
+# randomIdentifier()
+should create random identifier.
+
+```js
+console.log( "ID length 1: " + hash.randomIdentifier( 1 ) ) ;
+console.log( "ID length 3: " + hash.randomIdentifier( 3 ) ) ;
+console.log( "ID length 5: " + hash.randomIdentifier( 5 ) ) ;
+console.log( "ID length 8: " + hash.randomIdentifier( 8 ) ) ;
 ```
 
