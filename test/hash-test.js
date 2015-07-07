@@ -87,6 +87,62 @@ describe( "Base64" , function() {
 
 
 
+// SHA1
+describe( "Fingerprint" , function() {
+	
+	it( "should give a fingerprint for any number, string or object" , function() {
+		
+		expect( hash.fingerprint( undefined ) ).to.be( undefined ) ;
+		expect( hash.fingerprint( null ) ).to.be( undefined ) ;
+		expect( hash.fingerprint( true ) ).to.be( undefined ) ;
+		expect( hash.fingerprint( false ) ).to.be( undefined ) ;
+		
+		expect( hash.fingerprint( '' ) ).to.be( '2jmj7l5rSw0yVb_vlWAYkK_YBwk' ) ;
+		expect( hash.fingerprint( 'Hello world' ) ).to.be( 'e1AsOh9IyGCa4hLN-2Od7jlnP14' ) ;
+		expect( hash.fingerprint( 'Hello world!' ) ).to.be( '00hq6RNueFa8QiEjhep5cJRHWAI' ) ;
+		expect( hash.fingerprint( 'Hello world!!' ) ).to.be( 'pZsCdBv_J6TD4jYzLymqYExyPoU' ) ;
+		expect( hash.fingerprint( 'Hello world!!!' ) ).to.be( 'ZVWqnSRfbcK1eqEzZsxsb8zKtq0' ) ;
+		expect( hash.fingerprint( 'Hello world!!!!' ) ).to.be( 'tDmmBBZfD5Ps1gEXw2l_Vkup7Uc' ) ;
+		
+		expect( hash.fingerprint( 0 ) ).to.be( 'AAAAAAAAAAA' ) ;
+		expect( hash.fingerprint( 3 ) ).to.be( 'AAAAAAAACEA' ) ;
+		expect( hash.fingerprint( -3 ) ).to.be( 'AAAAAAAACMA' ) ;
+		expect( hash.fingerprint( 0.111 ) ).to.be( '0SLb-X5qvD8' ) ;
+		expect( hash.fingerprint( 3.1416 ) ).to.be( 'p-hILv8hCUA' ) ;
+		expect( hash.fingerprint( 1024 ) ).to.be( 'AAAAAAAAkEA' ) ;
+		expect( hash.fingerprint( 1234.5678 ) ).to.be( 'rfpcbUVKk0A' ) ;
+		expect( hash.fingerprint( -98765.01234 ) ).to.be( 'h22LMtAc-MA' ) ;
+		
+		expect( hash.fingerprint( { a: 'simple object' } ) ).to.be( 'W0r4pb6K8j2fuAby23Uh09tRMWY' ) ;
+		expect( hash.fingerprint( { a: 'more', complex: 'object' } ) ).to.be( 'jt-uFvaG4wwRBX9r59Z6SE_jkSY' ) ;
+		expect( hash.fingerprint( {
+			yo: 'dawg',
+			i: 'herd yo like object' ,
+			so: {
+				i: 'put object' ,
+				into: {
+					object: {
+						into: {
+							object: {} ,
+							so: 'you can code OO' ,
+							'while': 'you code OO'
+						}
+					}
+				}
+			} ,
+			dawg: '!'
+		} ) ).to.be( 'PQyYIhsVh4yunqUi5C-Hedq1Vyg' ) ;
+		
+		expect( hash.fingerprint( [1,2,3] ) ).to.be( 'nvUMyCrkdCefuOgolhQnArzLszo' ) ;
+		expect( hash.fingerprint( [ 'one' , 'two' , 'three' ] ) ).to.be( 'RRbpaRjq1yi0FFseM2wai_3uxH0' ) ;
+		
+	} ) ;
+} ) ;
+
+
+
+/*
+// MD5
 describe( "Fingerprint" , function() {
 	
 	it( "should give a fingerprint for any number, string or object" , function() {
@@ -137,6 +193,7 @@ describe( "Fingerprint" , function() {
 		
 	} ) ;
 } ) ;
+*/
 
 
 
