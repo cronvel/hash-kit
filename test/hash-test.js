@@ -207,3 +207,16 @@ describe( "randomIdentifier()" , function() {
 	} ) ;
 } ) ;
 
+
+
+describe( "password()" , function() {
+	
+	it( "should create a password hash" , function() {
+		console.log( "hash 1: " + hash.password( 'toto' ) ) ;
+		console.log( "hash 2: " + hash.password( 'toto' , '' , 'sha1' ) ) ;
+		console.log( "hash 3: " + hash.password( 'toto' , '' , 'sha256' ) ) ;
+		console.log( "hash 4: " + hash.password( 'toto' , 'salt' ) ) ;
+		console.log( "hash 5: " + hash.password( 'toto' , 'salt' , 'sha256') ) ;
+	} ) ;
+} ) ;
+
