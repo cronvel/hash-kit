@@ -220,3 +220,12 @@ describe( "password()" , function() {
 	} ) ;
 } ) ;
 
+
+
+describe( "createToken()" , function() {
+	
+	it( "should create a token" , function() {
+		console.log( "token: " + hash.createToken( [ 'increment' ] ) ) ;
+	} ) ;
+} ) ;
+
