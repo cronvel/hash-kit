@@ -225,7 +225,30 @@ describe( "password()" , function() {
 describe( "createToken()" , function() {
 	
 	it( "should create a token" , function() {
-		console.log( "token: " + hash.createToken( [ 'increment' ] ) ) ;
+		
+		var tokenStructure = [
+			{ key: 'creationTime' , type: 'timestamp' } ,
+			{ key: 'increment' , type: 'increment16' } ,
+			{ key: 'random' , type: 'random' , length: 3 } ,
+			{ key: 'duration' , type: 'uint' , length: 2 } ,
+			{ key: 'type' , type: 'BASE36' , length: 2 } ,
+		] ;
+		
+		var gen = hash.createTokenGenerator( tokenStructure ) ;
+		
+		var test = function( data ) {
+			console.log( "\n###\nData:" , data ) ;
+			var token = gen.create( data ) ;
+			console.log( "Data after create():" , data ) ;
+			var extracted = gen.extract( token ) ;
+			console.log( "Token:" , token ) ;
+			console.log( "Extracted:" , extracted ) ;
+			expect( extracted ).to.eql( data ) ;
+		} ;
+		
+		test( { duration: 300 , type: 'H' } ) ;
+		test( { duration: 600 , type: 'QS' } ) ;
+		test( { duration: 3600 , type: 'CK' } ) ;
 	} ) ;
 } ) ;
 
