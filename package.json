@@ -1,8 +1,11 @@
 {
   "name": "hash-kit",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "A hash creation toolkit.",
   "main": "lib/hash.js",
+  "engines": {
+    "node": ">=4.5.0"
+  },
   "directories": {
     "test": "test"
   },
@@ -13,7 +16,7 @@
     "mocha": "^1.21.4"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "tea-time -R dot"
   },
   "repository": {
     "type": "git",
