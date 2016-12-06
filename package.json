@@ -1,13 +1,14 @@
 {
   "name": "hash-kit",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "A hash creation toolkit.",
   "main": "lib/hash.js",
   "engines": {
     "node": ">=4.5.0"
   },
   "directories": {
-    "test": "test"
+    "test": "test",
+    "bench": "bench"
   },
   "dependencies": {},
   "devDependencies": {
