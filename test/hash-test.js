@@ -1,20 +1,20 @@
 /*
 	Hash Kit
-	
-	Copyright (c) 2014 - 2016 Cédric Ronvel
-	
+
+	Copyright (c) 2014 - 2018 Cédric Ronvel
+
 	The MIT License (MIT)
-	
+
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal
 	in the Software without restriction, including without limitation the rights
 	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 	copies of the Software, and to permit persons to whom the Software is
 	furnished to do so, subject to the following conditions:
-	
+
 	The above copyright notice and this permission notice shall be included in all
 	copies or substantial portions of the Software.
-	
+
 	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -24,40 +24,34 @@
 	SOFTWARE.
 */
 
-/* jshint unused:false */
-/* global describe, it, before, after */
+"use strict" ;
 
 
 
-var hash = require( '../lib/hash.js' ) ;
-var expect = require( 'expect.js' ) ;
-
+var hash = require( '..' ) ;
 
 
 
 
-			/* Helper functions */
+
+/* Helper functions */
 
 
 
-function base64Tests( str , base64 , base64Url )
-{
-	if ( str !== undefined && base64 !== undefined )
-	{
-		expect( hash.base64Encode( str ) ).to.equal( base64 ) ;
-		expect( hash.base64Decode( base64 , { to: 'utf8' } ) ).to.equal( str ) ;
+function base64Tests( str , base64 , base64Url ) {
+	if ( str !== undefined && base64 !== undefined ) {
+		expect( hash.base64Encode( str ) ).to.be( base64 ) ;
+		expect( hash.base64Decode( base64 , { to: 'utf8' } ) ).to.be( str ) ;
 	}
-	
-	if ( str !== undefined && base64Url !== undefined )
-	{
-		expect( hash.base64Encode( str , { url: true } ) ).to.equal( base64Url ) ;
-		expect( hash.base64Decode( base64Url , { url: true, to: 'utf8' } ) ).to.equal( str ) ;
+
+	if ( str !== undefined && base64Url !== undefined ) {
+		expect( hash.base64Encode( str , { url: true } ) ).to.be( base64Url ) ;
+		expect( hash.base64Decode( base64Url , { url: true , to: 'utf8' } ) ).to.be( str ) ;
 	}
-	
-	if ( base64 !== undefined && base64Url !== undefined )
-	{
-		expect( hash.base64Encode( hash.base64Decode( base64Url , { url: true } ) ) ).to.equal( base64 ) ;
-		expect( hash.base64Encode( hash.base64Decode( base64 ) , { url: true } ) ).to.equal( base64Url ) ;
+
+	if ( base64 !== undefined && base64Url !== undefined ) {
+		expect( hash.base64Encode( hash.base64Decode( base64Url , { url: true } ) ) ).to.be( base64 ) ;
+		expect( hash.base64Encode( hash.base64Decode( base64 ) , { url: true } ) ).to.be( base64Url ) ;
 	}
 }
 
@@ -65,14 +59,14 @@ function base64Tests( str , base64 , base64Url )
 
 
 
-			/* Tests */
+/* Tests */
 
 
 
-describe( "Base64" , function() {
-	
-	it( "should encode and decode a string using Base64 encoding and Base64 URL encoding" , function() {
-		
+describe( "Base64" , () => {
+
+	it( "should encode and decode a string using Base64 encoding and Base64 URL encoding" , () => {
+
 		base64Tests( '' , '' , '' ) ;
 		base64Tests( 'Hello world' , 'SGVsbG8gd29ybGQ=' , 'SGVsbG8gd29ybGQ' ) ;
 		base64Tests( 'Hello world!' , 'SGVsbG8gd29ybGQh' , 'SGVsbG8gd29ybGQh' ) ;
@@ -88,22 +82,22 @@ describe( "Base64" , function() {
 
 
 // SHA1
-describe( "Fingerprint" , function() {
-	
-	it( "should give a fingerprint for any number, string or object" , function() {
-		
+describe( "Fingerprint" , () => {
+
+	it( "should give a fingerprint for any number, string or object" , () => {
+
 		expect( hash.fingerprint( undefined ) ).to.be( undefined ) ;
 		expect( hash.fingerprint( null ) ).to.be( undefined ) ;
 		expect( hash.fingerprint( true ) ).to.be( undefined ) ;
 		expect( hash.fingerprint( false ) ).to.be( undefined ) ;
-		
+
 		expect( hash.fingerprint( '' ) ).to.be( '2jmj7l5rSw0yVb_vlWAYkK_YBwk' ) ;
 		expect( hash.fingerprint( 'Hello world' ) ).to.be( 'e1AsOh9IyGCa4hLN-2Od7jlnP14' ) ;
 		expect( hash.fingerprint( 'Hello world!' ) ).to.be( '00hq6RNueFa8QiEjhep5cJRHWAI' ) ;
 		expect( hash.fingerprint( 'Hello world!!' ) ).to.be( 'pZsCdBv_J6TD4jYzLymqYExyPoU' ) ;
 		expect( hash.fingerprint( 'Hello world!!!' ) ).to.be( 'ZVWqnSRfbcK1eqEzZsxsb8zKtq0' ) ;
 		expect( hash.fingerprint( 'Hello world!!!!' ) ).to.be( 'tDmmBBZfD5Ps1gEXw2l_Vkup7Uc' ) ;
-		
+
 		expect( hash.fingerprint( 0 ) ).to.be( 'AAAAAAAAAAA' ) ;
 		expect( hash.fingerprint( 3 ) ).to.be( 'AAAAAAAACEA' ) ;
 		expect( hash.fingerprint( -3 ) ).to.be( 'AAAAAAAACMA' ) ;
@@ -112,11 +106,11 @@ describe( "Fingerprint" , function() {
 		expect( hash.fingerprint( 1024 ) ).to.be( 'AAAAAAAAkEA' ) ;
 		expect( hash.fingerprint( 1234.5678 ) ).to.be( 'rfpcbUVKk0A' ) ;
 		expect( hash.fingerprint( -98765.01234 ) ).to.be( 'h22LMtAc-MA' ) ;
-		
+
 		expect( hash.fingerprint( { a: 'simple object' } ) ).to.be( 'W0r4pb6K8j2fuAby23Uh09tRMWY' ) ;
-		expect( hash.fingerprint( { a: 'more', complex: 'object' } ) ).to.be( 'jt-uFvaG4wwRBX9r59Z6SE_jkSY' ) ;
+		expect( hash.fingerprint( { a: 'more' , complex: 'object' } ) ).to.be( 'jt-uFvaG4wwRBX9r59Z6SE_jkSY' ) ;
 		expect( hash.fingerprint( {
-			yo: 'dawg',
+			yo: 'dawg' ,
 			i: 'herd yo like object' ,
 			so: {
 				i: 'put object' ,
@@ -132,74 +126,32 @@ describe( "Fingerprint" , function() {
 			} ,
 			dawg: '!'
 		} ) ).to.be( 'PQyYIhsVh4yunqUi5C-Hedq1Vyg' ) ;
-		
-		expect( hash.fingerprint( [1,2,3] ) ).to.be( 'nvUMyCrkdCefuOgolhQnArzLszo' ) ;
+
+		expect( hash.fingerprint( [ 1 , 2 , 3 ] ) ).to.be( 'nvUMyCrkdCefuOgolhQnArzLszo' ) ;
 		expect( hash.fingerprint( [ 'one' , 'two' , 'three' ] ) ).to.be( 'RRbpaRjq1yi0FFseM2wai_3uxH0' ) ;
-		
+
 	} ) ;
 } ) ;
 
 
 
-/*
-// MD5
-describe( "Fingerprint" , function() {
-	
-	it( "should give a fingerprint for any number, string or object" , function() {
-		
-		expect( hash.fingerprint( undefined ) ).to.be( undefined ) ;
-		expect( hash.fingerprint( null ) ).to.be( undefined ) ;
-		expect( hash.fingerprint( true ) ).to.be( undefined ) ;
-		expect( hash.fingerprint( false ) ).to.be( undefined ) ;
-		
-		expect( hash.fingerprint( '' ) ).to.be( '1B2M2Y8AsgTpgAmY7PhCfg' ) ;
-		expect( hash.fingerprint( 'Hello world' ) ).to.be( 'PiWWCnnbxptnTNTsZ6csYg' ) ;
-		expect( hash.fingerprint( 'Hello world!' ) ).to.be( 'hvsmnRkNLIX24EaM7KQqIA' ) ;
-		expect( hash.fingerprint( 'Hello world!!' ) ).to.be( 'HZTdff0FBBAYWlNblXXhhA' ) ;
-		expect( hash.fingerprint( 'Hello world!!!' ) ).to.be( 'h-5zLYMWkPRbhgaxVHvQng' ) ;
-		expect( hash.fingerprint( 'Hello world!!!!' ) ).to.be( '4PtDH15tYRUdK3nO25BJRQ' ) ;
-		
-		expect( hash.fingerprint( 0 ) ).to.be( 'AAAAAAAAAAA' ) ;
-		expect( hash.fingerprint( 3 ) ).to.be( 'AAAAAAAACEA' ) ;
-		expect( hash.fingerprint( -3 ) ).to.be( 'AAAAAAAACMA' ) ;
-		expect( hash.fingerprint( 0.111 ) ).to.be( '0SLb-X5qvD8' ) ;
-		expect( hash.fingerprint( 3.1416 ) ).to.be( 'p-hILv8hCUA' ) ;
-		expect( hash.fingerprint( 1024 ) ).to.be( 'AAAAAAAAkEA' ) ;
-		expect( hash.fingerprint( 1234.5678 ) ).to.be( 'rfpcbUVKk0A' ) ;
-		expect( hash.fingerprint( -98765.01234 ) ).to.be( 'h22LMtAc-MA' ) ;
-		
-		expect( hash.fingerprint( { a: 'simple object' } ) ).to.be( 'WJ86ea_U_oFPIzWCPPnDbg' ) ;
-		expect( hash.fingerprint( { a: 'more', complex: 'object' } ) ).to.be( '0wXBJSfTRdkEhAfBgyZWKA' ) ;
-		expect( hash.fingerprint( {
-			yo: 'dawg',
-			i: 'herd yo like object' ,
-			so: {
-				i: 'put object' ,
-				into: {
-					object: {
-						into: {
-							object: {} ,
-							so: 'you can code OO' ,
-							'while': 'you code OO'
-						}
-					}
-				}
-			} ,
-			dawg: '!'
-		} ) ).to.be( 'GiMV0HBoL-FPWphYkNbmQA' ) ;
-		
-		expect( hash.fingerprint( [1,2,3] ) ).to.be( '8eRvMo5t7NVsZN1edh3Ctw' ) ;
-		expect( hash.fingerprint( [ 'one' , 'two' , 'three' ] ) ).to.be( '54iNs6qLk1eoz57dmYp4kA' ) ;
-		
+describe( "password()" , () => {
+
+	it( "should create a password hash" , () => {
+		expect( hash.password( 'toto' ) ).to.be( 'EOBrmQ1E3gCRohE/2VyS/JBRZq8UeqdjJjnEGqfyaxYgxHRDgTxgW5JMBVkcFh7MNZRPxpxEM6SdEPxrBKM2EQ==' ) ;
+		expect( hash.password( 'toto' , '' , 'sha512' ) ).to.be( 'EOBrmQ1E3gCRohE/2VyS/JBRZq8UeqdjJjnEGqfyaxYgxHRDgTxgW5JMBVkcFh7MNZRPxpxEM6SdEPxrBKM2EQ==' ) ;
+		expect( hash.password( 'toto' , '' , 'sha1' ) ).to.be( 'C5wmJdwh7wX2rU3fR8XyA4N6oyw=' ) ;
+		expect( hash.password( 'toto' , '' , 'sha256' ) ).to.be( 'MfemXjFVhqwZi9eYtmKc5JA9CJlHbVdBqfMuLlIbamY=' ) ;
+		expect( hash.password( 'toto' , 'salt' ) ).to.be( '4kPaD8PBo2CQ96uTtz57RrMP4jrDA7Z9ebp7YFnvyxRuyiAgxllsA69BZMv01IPudTyXtbawlW2/5FSVvQ+Rsw==' ) ;
+		expect( hash.password( 'toto' , 'salt' , 'sha256' ) ).to.be( 'v4pvAFy375tQQgcpo3T+yN2chkmAL2HE6wF7Ee9eKuQ=' ) ;
 	} ) ;
 } ) ;
-*/
 
 
 
-describe( "randomIdentifier()" , function() {
-	
-	it( "should create random identifier" , function() {
+describe( "randomIdentifier()" , () => {
+
+	it( "should create random identifier" , () => {
 		console.log( "ID length 1: " + hash.randomIdentifier( 1 ) ) ;
 		console.log( "ID length 3: " + hash.randomIdentifier( 3 ) ) ;
 		console.log( "ID length 5: " + hash.randomIdentifier( 5 ) ) ;
@@ -209,16 +161,18 @@ describe( "randomIdentifier()" , function() {
 
 
 
-describe( "password()" , function() {
+describe( "random string" , () => {
+
+	it( "should create random base64 string" , () => {
+		console.log( "bytelength 6: " + hash.randomBase64( 6 ) ) ;
+		console.log( "bytelength 16: " + hash.randomBase64( 16 ) ) ;
+		console.log( "bytelength 32: " + hash.randomBase64( 32 ) ) ;
+	} ) ;
 	
-	it( "should create a password hash" , function() {
-		console.log( "hash 1: " + hash.password( 'toto' ) ) ;
-		console.log( "hash 2: " + hash.password( 'toto' , '' , 'sha1' ) ) ;
-		console.log( "hash 3: " + hash.password( 'toto' , '' , 'sha256' ) ) ;
-		console.log( "hash 4: " + hash.password( 'toto' , 'salt' ) ) ;
-		console.log( "hash 5: " + hash.password( 'toto' , 'salt' , 'sha256') ) ;
+	it( "should create random hex string" , () => {
+		console.log( "bytelength 6: " + hash.randomHex( 6 ) ) ;
+		console.log( "bytelength 16: " + hash.randomHex( 16 ) ) ;
+		console.log( "bytelength 32: " + hash.randomHex( 32 ) ) ;
 	} ) ;
 } ) ;
-
-
 
