@@ -1,7 +1,7 @@
 /*
 	Hash Kit
 
-	Copyright (c) 2014 - 2018 Cédric Ronvel
+	Copyright (c) 2014 - 2020 Cédric Ronvel
 
 	The MIT License (MIT)
 
@@ -28,13 +28,7 @@
 
 
 
-var hash = require( '..' ) ;
-
-
-
-
-
-/* Helper functions */
+const hash = require( '..' ) ;
 
 
 
@@ -57,16 +51,9 @@ function base64Tests( str , base64 , base64Url ) {
 
 
 
-
-
-/* Tests */
-
-
-
 describe( "Base64" , () => {
 
 	it( "should encode and decode a string using Base64 encoding and Base64 URL encoding" , () => {
-
 		base64Tests( '' , '' , '' ) ;
 		base64Tests( 'Hello world' , 'SGVsbG8gd29ybGQ=' , 'SGVsbG8gd29ybGQ' ) ;
 		base64Tests( 'Hello world!' , 'SGVsbG8gd29ybGQh' , 'SGVsbG8gd29ybGQh' ) ;
@@ -85,7 +72,6 @@ describe( "Base64" , () => {
 describe( "Fingerprint" , () => {
 
 	it( "should give a fingerprint for any number, string or object" , () => {
-
 		expect( hash.fingerprint( undefined ) ).to.be( undefined ) ;
 		expect( hash.fingerprint( null ) ).to.be( undefined ) ;
 		expect( hash.fingerprint( true ) ).to.be( undefined ) ;
@@ -163,13 +149,37 @@ describe( "randomIdentifier()" , () => {
 
 describe( "random string" , () => {
 
-	it( "should create random base64 string" , () => {
+	it( "should create random hex string" , () => {
+		console.log( "length 6: " + hash.randomHexString( 6 ) ) ;
+		console.log( "length 16: " + hash.randomHexString( 16 ) ) ;
+		console.log( "length 32: " + hash.randomHexString( 32 ) ) ;
+	} ) ;
+	
+	it( "should create random base36 string" , () => {
+		console.log( "length 6: " + hash.randomBase36String( 6 ) ) ;
+		console.log( "length 16: " + hash.randomBase36String( 16 ) ) ;
+		console.log( "length 32: " + hash.randomBase36String( 32 ) ) ;
+	} ) ;
+	
+	it( "should create random base62 string" , () => {
+		console.log( "length 6: " + hash.randomBase62String( 6 ) ) ;
+		console.log( "length 16: " + hash.randomBase62String( 16 ) ) ;
+		console.log( "length 32: " + hash.randomBase62String( 32 ) ) ;
+	} ) ;
+	
+	it( "should create random base64url string" , () => {
+		console.log( "length 6: " + hash.randomBase64UrlString( 6 ) ) ;
+		console.log( "length 16: " + hash.randomBase64UrlString( 16 ) ) ;
+		console.log( "length 32: " + hash.randomBase64UrlString( 32 ) ) ;
+	} ) ;
+	
+	it( "should create random base64 bytes to string" , () => {
 		console.log( "bytelength 6: " + hash.randomBase64( 6 ) ) ;
 		console.log( "bytelength 16: " + hash.randomBase64( 16 ) ) ;
 		console.log( "bytelength 32: " + hash.randomBase64( 32 ) ) ;
 	} ) ;
 	
-	it( "should create random hex string" , () => {
+	it( "should create random hex bytes to string" , () => {
 		console.log( "bytelength 6: " + hash.randomHex( 6 ) ) ;
 		console.log( "bytelength 16: " + hash.randomHex( 16 ) ) ;
 		console.log( "bytelength 32: " + hash.randomHex( 32 ) ) ;
