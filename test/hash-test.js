@@ -161,6 +161,12 @@ describe( "random string" , () => {
 		console.log( "length 32: " + hash.randomHexString( 32 ) ) ;
 	} ) ;
 	
+	it( "should create random base26 string" , () => {
+		console.log( "length 6: " + hash.randomBase26String( 6 ) ) ;
+		console.log( "length 16: " + hash.randomBase26String( 16 ) ) ;
+		console.log( "length 32: " + hash.randomBase26String( 32 ) ) ;
+	} ) ;
+	
 	it( "should create random base36 string" , () => {
 		console.log( "length 6: " + hash.randomBase36String( 6 ) ) ;
 		console.log( "length 16: " + hash.randomBase36String( 16 ) ) ;
