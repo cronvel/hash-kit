@@ -149,6 +149,12 @@ describe( "randomIdentifier()" , () => {
 
 describe( "random string" , () => {
 
+	it( "should create random number string" , () => {
+		console.log( "length 6: " + hash.randomNumberString( 6 ) ) ;
+		console.log( "length 16: " + hash.randomNumberString( 16 ) ) ;
+		console.log( "length 32: " + hash.randomNumberString( 32 ) ) ;
+	} ) ;
+	
 	it( "should create random hex string" , () => {
 		console.log( "length 6: " + hash.randomHexString( 6 ) ) ;
 		console.log( "length 16: " + hash.randomHexString( 16 ) ) ;
