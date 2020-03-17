@@ -94,7 +94,13 @@ describe( "Fingerprint" , () => {
 		expect( hash.fingerprint( -98765.01234 ) ).to.be( 'h22LMtAc-MA' ) ;
 
 		expect( hash.fingerprint( { a: 'simple object' } ) ).to.be( 'W0r4pb6K8j2fuAby23Uh09tRMWY' ) ;
+		
+		// It should be consistant when the object have keys in another order
 		expect( hash.fingerprint( { a: 'more' , complex: 'object' } ) ).to.be( 'jt-uFvaG4wwRBX9r59Z6SE_jkSY' ) ;
+		expect( hash.fingerprint( { complex: 'object' , a: 'more' } ) ).to.be( 'jt-uFvaG4wwRBX9r59Z6SE_jkSY' ) ;
+		expect( hash.fingerprint( { a: 'more' , complex: 'object' , with: 'three' , key: '!' } ) ).to.be( 'hVv0fhtfIsCTms1kyNfqJl6tAcE' ) ;
+		expect( hash.fingerprint( { with: 'three' , key: '!' , a: 'more' , complex: 'object' } ) ).to.be( 'hVv0fhtfIsCTms1kyNfqJl6tAcE' ) ;
+
 		expect( hash.fingerprint( {
 			yo: 'dawg' ,
 			i: 'herd yo like object' ,
@@ -111,11 +117,13 @@ describe( "Fingerprint" , () => {
 				}
 			} ,
 			dawg: '!'
-		} ) ).to.be( 'PQyYIhsVh4yunqUi5C-Hedq1Vyg' ) ;
+		} ) ).to.be( 'RYt0eCL2pgDNCHnaUwcZjIrgckQ' ) ;
 
 		expect( hash.fingerprint( [ 1 , 2 , 3 ] ) ).to.be( 'nvUMyCrkdCefuOgolhQnArzLszo' ) ;
-		expect( hash.fingerprint( [ 'one' , 'two' , 'three' ] ) ).to.be( 'RRbpaRjq1yi0FFseM2wai_3uxH0' ) ;
+		expect( hash.fingerprint( [ 3 , 1 , 2 ] ) ).to.be( 'QXUjbeBjiCQT-FWKlE5KYHV6r8U' ) ;
 
+		expect( hash.fingerprint( [ 'one' , 'two' , 'three' ] ) ).to.be( 'RRbpaRjq1yi0FFseM2wai_3uxH0' ) ;
+		expect( hash.fingerprint( [ 'two' , , 'one' , 'three' ] ) ).to.be( 'xjRRcPN78UPZ0QKIbmqWZis2RSI' ) ;
 	} ) ;
 } ) ;
 
