@@ -1,6 +1,6 @@
 {
   "name": "hash-kit",
-  "version": "0.3.9",
+  "version": "0.3.10",
   "description": "A hash creation toolkit.",
   "main": "lib/hash.js",
   "engines": {
@@ -10,10 +10,10 @@
     "test": "test",
     "bench": "bench"
   },
-  "dependencies": {
-    "json-kit": "^0.6.5"
+  "dependencies": {},
+  "devDependencies": {
+    "json-kit": "^0.6.6"
   },
-  "devDependencies": {},
   "scripts": {
     "test": "tea-time -R dot"
   },
