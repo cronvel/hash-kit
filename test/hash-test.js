@@ -124,6 +124,9 @@ describe( "Fingerprint" , () => {
 
 		expect( hash.fingerprint( [ 'one' , 'two' , 'three' ] ) ).to.be( 'RRbpaRjq1yi0FFseM2wai_3uxH0' ) ;
 		expect( hash.fingerprint( [ 'two' , , 'one' , 'three' ] ) ).to.be( 'xjRRcPN78UPZ0QKIbmqWZis2RSI' ) ;
+
+		// Check that cases produce the same result
+		expect( hash.fingerprint( { B: 2 , b: 2 , a: 1 , A: 1 } ) ).to.be( hash.fingerprint( { A: 1 , a: 1 , b: 2 , B: 2 } ) ) ;
 	} ) ;
 } ) ;
 
