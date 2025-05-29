@@ -1,7 +1,7 @@
 /*
 	Hash Kit
 
-	Copyright (c) 2014 - 2020 Cédric Ronvel
+	Copyright (c) 2014 - 2025 Cédric Ronvel
 
 	The MIT License (MIT)
 
