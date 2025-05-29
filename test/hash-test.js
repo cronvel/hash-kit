@@ -177,6 +177,18 @@ describe( "Anti-spam/anti-bot: .computeChallengeHash() and .verifyChallengeHash(
 		expect( hash.verifyChallengeHash( challenge , 'AzE4' , result.hash , challengeParams ) ).not.to.be.ok() ;
 		expect( hash.verifyChallengeHash( challenge , result.counter , 'y4' + result.hash.slice( 2 )  , challengeParams) ).not.to.be.ok() ;
 		expect( hash.verifyChallengeHash( challenge + '!' , result.counter , result.hash  , challengeParams) ).not.to.be.ok() ;
+
+		var challengeParams = {
+			zeroes: 20 ,
+			encoding: 'base64url' ,
+			algo: 'sha256' ,
+			joint: ':',
+			strip: true
+		} ;
+
+		result = hash.computeChallengeHash( challenge , challengeParams ) ;
+		console.log( "Results:" , result ) ;
+		expect( hash.verifyChallengeHash( challenge , result.counter , result.hash , challengeParams ) ).to.be.ok() ;
 	} ) ;
 } ) ;
 

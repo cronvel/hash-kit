@@ -10,9 +10,8 @@
     "test": "test",
     "bench": "bench"
   },
-  "dependencies": {},
   "devDependencies": {
-    "json-kit": "^0.6.6"
+    "json-kit": "^0.7.3"
   },
   "scripts": {
     "test": "tea-time -R dot"

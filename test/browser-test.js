@@ -29,7 +29,8 @@
 
 
 const hash = require( '..' ) ;
-const browserHash = require( '../lib/browser-challenge.js' ) ;
+var browserHash ;
+//const browserHash = require( '../lib/browser-challenge.js' ) ;
 
 
 
@@ -44,11 +45,14 @@ function base64Tests( str , base64 , base64Url ) {
 
 
 
-describe( "Browser" , () => {
+describe( "Browser" , async () => {
+	before( async () => {
+		browserHash = ( await import( '../lib/browser-challenge.mjs' ) ).default ;
+	} ) ;
 
 	describe( "Base64" , () => {
 
-		it( "should encode and decode a string using Base64 encoding and Base64 URL encoding" , () => {
+		it( "should encode and decode a string using Base64 encoding and Base64 URL encoding" , async () => {
 			base64Tests( '' , '' , '' ) ;
 			base64Tests( 'Hello world' , 'SGVsbG8gd29ybGQ=' , 'SGVsbG8gd29ybGQ' ) ;
 			base64Tests( 'Hello world!' , 'SGVsbG8gd29ybGQh' , 'SGVsbG8gd29ybGQh' ) ;
@@ -60,39 +64,33 @@ describe( "Browser" , () => {
 		} ) ;
 	} ) ;
 
-
-	return ;
 	describe( "Anti-spam/anti-bot: .computeChallengeHash() and .verifyChallengeHash()" , () => {
 
-		it( "should compute and verify a challenge hash" , function() {
+		it( "should compute and verify a challenge hash, should be interoperable" , async function() {
 			this.timeout( 8000 ) ;
-			var challenge = "grigrigredin menu fretin" ;
-			let result = hash.computeChallengeHash( challenge ) ;
-			console.log( "Results:" , result ) ;
-			expect( hash.verifyChallengeHash( challenge , result.counter , result.hash ) ).to.be.ok() ;
-			expect( hash.verifyChallengeHash( challenge , 'AzE4' , result.hash ) ).not.to.be.ok() ;
-			expect( hash.verifyChallengeHash( challenge , result.counter , 'y4' + result.hash.slice( 2 ) ) ).not.to.be.ok() ;
-			expect( hash.verifyChallengeHash( challenge + '!' , result.counter , result.hash ) ).not.to.be.ok() ;
-		} ) ;
-
-		it( "should accept different parameters (algo, joint, zeroes, encoding, strip) for computing and verifying a challenge hash" , function() {
-			this.timeout( 16000 ) ;
 
 			var challengeParams = {
-				zeroes: 22 ,
-				encoding: 'hex' ,
-				algo: 'sha1' ,
-				joint: '|',
-				strip: false
+				zeroes: 18 ,
+				encoding: 'base64url' ,
+				algo: 'sha256' ,
+				joint: ':',
+				strip: true
 			} ;
 
 			var challenge = "grigrigredin menu fretin" ;
-			let result = hash.computeChallengeHash( challenge , challengeParams ) ;
-			console.log( "Results:" , result ) ;
-			expect( hash.verifyChallengeHash( challenge , result.counter , result.hash , challengeParams ) ).to.be.ok() ;
-			expect( hash.verifyChallengeHash( challenge , 'AzE4' , result.hash , challengeParams ) ).not.to.be.ok() ;
-			expect( hash.verifyChallengeHash( challenge , result.counter , 'y4' + result.hash.slice( 2 )  , challengeParams) ).not.to.be.ok() ;
-			expect( hash.verifyChallengeHash( challenge + '!' , result.counter , result.hash  , challengeParams) ).not.to.be.ok() ;
+
+			let browserResult = await browserHash.computeChallengeHash( challenge , challengeParams ) ;
+			console.log( "Browser results:" , browserResult ) ;
+			expect( await browserHash.verifyChallengeHash( challenge , browserResult.counter , browserResult.hash , challengeParams ) ).to.be.ok() ;
+			expect( await browserHash.verifyChallengeHash( challenge , 'AzE4' , browserResult.hash , challengeParams ) ).not.to.be.ok() ;
+			expect( await browserHash.verifyChallengeHash( challenge , browserResult.counter , 'y4' + browserResult.hash.slice( 2 )  , challengeParams) ).not.to.be.ok() ;
+			expect( await browserHash.verifyChallengeHash( challenge + '!' , browserResult.counter , browserResult.hash  , challengeParams) ).not.to.be.ok() ;
+
+			let nodeResult = hash.computeChallengeHash( challenge , challengeParams ) ;
+			console.log( "Node results:" , nodeResult ) ;
+			expect( nodeResult ).to.equal( browserResult ) ;
+			expect( hash.verifyChallengeHash( challenge , browserResult.counter , browserResult.hash , challengeParams ) ).to.be.ok() ;
+			expect( await browserHash.verifyChallengeHash( challenge , nodeResult.counter , nodeResult.hash , challengeParams ) ).to.be.ok() ;
 		} ) ;
 	} ) ;
 
