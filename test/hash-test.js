@@ -132,7 +132,7 @@ describe( "Fingerprint" , () => {
 
 
 
-describe( "password()" , () => {
+describe( ".password()" , () => {
 
 	it( "should create a password hash" , () => {
 		expect( hash.password( 'toto' ) ).to.be( 'EOBrmQ1E3gCRohE/2VyS/JBRZq8UeqdjJjnEGqfyaxYgxHRDgTxgW5JMBVkcFh7MNZRPxpxEM6SdEPxrBKM2EQ==' ) ;
@@ -146,7 +146,43 @@ describe( "password()" , () => {
 
 
 
-describe( "randomIdentifier()" , () => {
+describe( "Anti-spam/anti-bot: .computeChallengeHash() and .verifyChallengeHash()" , () => {
+
+	it( "should compute and verify a challenge hash" , function() {
+		this.timeout( 8000 ) ;
+		var challenge = "grigrigredin menu fretin" ;
+		let result = hash.computeChallengeHash( challenge ) ;
+		console.log( "Results:" , result ) ;
+		expect( hash.verifyChallengeHash( challenge , result.counter , result.hash ) ).to.be.ok() ;
+		expect( hash.verifyChallengeHash( challenge , 'AzE4' , result.hash ) ).not.to.be.ok() ;
+		expect( hash.verifyChallengeHash( challenge , result.counter , 'y4' + result.hash.slice( 2 ) ) ).not.to.be.ok() ;
+		expect( hash.verifyChallengeHash( challenge + '!' , result.counter , result.hash ) ).not.to.be.ok() ;
+	} ) ;
+
+	it( "should accept different parameters (algo, joint, zeroes, encoding, strip) for computing and verifying a challenge hash" , function() {
+		this.timeout( 16000 ) ;
+
+		var challengeParams = {
+			zeroes: 22 ,
+			encoding: 'hex' ,
+			algo: 'sha1' ,
+			joint: '|',
+			strip: false
+		} ;
+
+		var challenge = "grigrigredin menu fretin" ;
+		let result = hash.computeChallengeHash( challenge , challengeParams ) ;
+		console.log( "Results:" , result ) ;
+		expect( hash.verifyChallengeHash( challenge , result.counter , result.hash , challengeParams ) ).to.be.ok() ;
+		expect( hash.verifyChallengeHash( challenge , 'AzE4' , result.hash , challengeParams ) ).not.to.be.ok() ;
+		expect( hash.verifyChallengeHash( challenge , result.counter , 'y4' + result.hash.slice( 2 )  , challengeParams) ).not.to.be.ok() ;
+		expect( hash.verifyChallengeHash( challenge + '!' , result.counter , result.hash  , challengeParams) ).not.to.be.ok() ;
+	} ) ;
+} ) ;
+
+
+
+describe( ".randomIdentifier()" , () => {
 
 	it( "should create random identifier" , () => {
 		console.log( "ID length 1: " + hash.randomIdentifier( 1 ) ) ;

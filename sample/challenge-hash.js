@@ -37,7 +37,7 @@ function run() {
 	var challengeParams = {
 		zeroes: 20 ,
 		encoding: 'base64url' ,
-		algo: 'sha512'
+		algo: 'sha256'
 	} ;
 	//challengeParams = undefined ;
 
@@ -48,7 +48,7 @@ function run() {
 	console.log( "Computed in " + computeTime + " ms, result:" , result ) ;
 
 	startTime = Date.now() ;
-	let verified = hash.checkChallengeHash( "grigrigredin menu fretin" , result.counter , result.hash , challengeParams ) ;
+	let verified = hash.verifyChallengeHash( "grigrigredin menu fretin" , result.counter , result.hash , challengeParams ) ;
 	let checkTime = Date.now() - startTime ;
 
 	console.log( "Verified in " + checkTime + " ms: " + ( verified ? "OK!" : "Not OK..." ) ) ;
