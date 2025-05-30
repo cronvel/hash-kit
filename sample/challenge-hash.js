@@ -34,21 +34,24 @@ const hash = require( '..' ) ;
 
 
 function run() {
-	var challengeParams = {
+	const CHALLENGE_PARAMS = {
 		zeroes: 20 ,
 		encoding: 'base64url' ,
-		algo: 'sha256'
+		algo: 'sha256' ,
+		joint: ':',
+		strip: true
 	} ;
-	//challengeParams = undefined ;
+
+	let challengeString = process.argv[ 2 ] || "grigrigredin menu fretin" ;
 
 	let startTime = Date.now() ;
-	let result = hash.computeChallengeHash( "grigrigredin menu fretin" , challengeParams ) ;
+	let result = hash.computeChallengeHash( challengeString , CHALLENGE_PARAMS ) ;
 	let computeTime = Date.now() - startTime ;
 
 	console.log( "Computed in " + computeTime + " ms, result:" , result ) ;
 
 	startTime = Date.now() ;
-	let verified = hash.verifyChallengeHash( "grigrigredin menu fretin" , result.counter , result.hash , challengeParams ) ;
+	let verified = hash.verifyChallengeHash( challengeString , result.counter , result.hash , CHALLENGE_PARAMS ) ;
 	let checkTime = Date.now() - startTime ;
 
 	console.log( "Verified in " + checkTime + " ms: " + ( verified ? "OK!" : "Not OK..." ) ) ;
