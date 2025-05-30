@@ -24,7 +24,7 @@
 	SOFTWARE.
 */
 
-import { sha224 , sha256 } from '../external/sha256.esm.js' ; 
+import { sha224 , sha256 } from './sha256.esm.js' ; 
 
 
 
@@ -37,7 +37,7 @@ const ALGO_ALIASES = {
 	sha512: 'SHA-512'
 } ;
 
-const generateHash = async ( algo , data ) =>  {
+const generateHash = ( algo , data ) =>  {
 	algo = Object.hasOwn( ALGO_ALIASES , algo ) ? ALGO_ALIASES[ algo ] : algo ;
 
 	var hashFn ;

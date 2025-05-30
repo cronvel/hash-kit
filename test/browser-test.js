@@ -29,30 +29,28 @@
 
 
 const hash = require( '..' ) ;
-var browserHash ;
-//const browserHash = require( '../lib/browser-challenge.js' ) ;
 
 
 
-function base64Tests( str , base64 , base64Url ) {
-	var array = new Uint8Array( Buffer.from( str ) ) ;
-	var computedBase64 = browserHash._arrayToBase64( array ) ;
-	var computedBase64Url = browserHash._arrayToBase64Url( array ) ;
-	console.log( "Base64:" , computedBase64 , computedBase64Url ) ;
-	expect( computedBase64 ).to.be( base64 ) ;
-	expect( computedBase64Url ).to.be( base64Url ) ;
-}
+describe( "Browser (Native Web Crypto API)" , () => {
+	var browserHash ;
+	
+	function base64Tests( str , base64 , base64Url ) {
+		var array = new Uint8Array( Buffer.from( str ) ) ;
+		var computedBase64 = browserHash._arrayToBase64( array ) ;
+		var computedBase64Url = browserHash._arrayToBase64Url( array ) ;
+		console.log( "Base64:" , computedBase64 , computedBase64Url ) ;
+		expect( computedBase64 ).to.be( base64 ) ;
+		expect( computedBase64Url ).to.be( base64Url ) ;
+	}
 
-
-
-describe( "Browser" , async () => {
 	before( async () => {
-		browserHash = ( await import( '../lib/browser-challenge.mjs' ) ).default ;
+		browserHash = ( await import( '../browser/challenge-webcrypto.mjs' ) ).default ;
 	} ) ;
 
 	describe( "Base64" , () => {
 
-		it( "should encode and decode a string using Base64 encoding and Base64 URL encoding" , async () => {
+		it( "should encode and decode a string using Base64 encoding and Base64 URL encoding" , () => {
 			base64Tests( '' , '' , '' ) ;
 			base64Tests( 'Hello world' , 'SGVsbG8gd29ybGQ=' , 'SGVsbG8gd29ybGQ' ) ;
 			base64Tests( 'Hello world!' , 'SGVsbG8gd29ybGQh' , 'SGVsbG8gd29ybGQh' ) ;
@@ -93,6 +91,68 @@ describe( "Browser" , async () => {
 			expect( await browserHash.verifyChallengeHash( challenge , nodeResult.counter , nodeResult.hash , challengeParams ) ).to.be.ok() ;
 		} ) ;
 	} ) ;
+} ) ;
 
+
+
+describe( "Browser (sha256 Js lib)" , () => {
+	var browserHash ;
+
+	before( async () => {
+		browserHash = ( await import( '../browser/challenge-sha256.mjs' ) ).default ;
+	} ) ;
+
+	function base64Tests( str , base64 , base64Url ) {
+		var array = new Uint8Array( Buffer.from( str ) ) ;
+		var computedBase64 = browserHash._arrayToBase64( array ) ;
+		var computedBase64Url = browserHash._arrayToBase64Url( array ) ;
+		console.log( "Base64:" , computedBase64 , computedBase64Url ) ;
+		expect( computedBase64 ).to.be( base64 ) ;
+		expect( computedBase64Url ).to.be( base64Url ) ;
+	}
+
+	describe( "Base64" , () => {
+
+		it( "should encode and decode a string using Base64 encoding and Base64 URL encoding" , () => {
+			base64Tests( '' , '' , '' ) ;
+			base64Tests( 'Hello world' , 'SGVsbG8gd29ybGQ=' , 'SGVsbG8gd29ybGQ' ) ;
+			base64Tests( 'Hello world!' , 'SGVsbG8gd29ybGQh' , 'SGVsbG8gd29ybGQh' ) ;
+			base64Tests( 'Hello world!!' , 'SGVsbG8gd29ybGQhIQ==' , 'SGVsbG8gd29ybGQhIQ' ) ;
+			base64Tests( 'Hello world!!!' , 'SGVsbG8gd29ybGQhISE=' , 'SGVsbG8gd29ybGQhISE' ) ;
+			base64Tests( 'Hello world!!!!' , 'SGVsbG8gd29ybGQhISEh' , 'SGVsbG8gd29ybGQhISEh' ) ;
+			base64Tests( 'H3110 \\/\\/021dZ! d4 `/4 1:|<3 d01142$?' , 'SDMxMTAgXC9cLzAyMWRaISBkNCBgLzQgMTp8PDMgZDAxMTQyJD8=' , 'SDMxMTAgXC9cLzAyMWRaISBkNCBgLzQgMTp8PDMgZDAxMTQyJD8' ) ;
+			base64Tests( '^~#°%£µ*§$' , 'Xn4jwrAlwqPCtSrCpyQ=' , 'Xn4jwrAlwqPCtSrCpyQ' ) ;
+		} ) ;
+	} ) ;
+
+	describe( "Anti-spam/anti-bot: .computeChallengeHash() and .verifyChallengeHash()" , () => {
+
+		it( "should compute and verify a challenge hash, should be interoperable" , function() {
+			this.timeout( 8000 ) ;
+
+			var challengeParams = {
+				zeroes: 20 ,
+				encoding: 'base64url' ,
+				algo: 'sha256' ,
+				joint: ':',
+				strip: true
+			} ;
+
+			var challenge = "grigrigredin menu fretin" ;
+
+			let browserResult = browserHash.computeChallengeHash( challenge , challengeParams ) ;
+			console.log( "Browser results:" , browserResult ) ;
+			expect( browserHash.verifyChallengeHash( challenge , browserResult.counter , browserResult.hash , challengeParams ) ).to.be.ok() ;
+			expect( browserHash.verifyChallengeHash( challenge , 'AzE4' , browserResult.hash , challengeParams ) ).not.to.be.ok() ;
+			expect( browserHash.verifyChallengeHash( challenge , browserResult.counter , 'y4' + browserResult.hash.slice( 2 )  , challengeParams) ).not.to.be.ok() ;
+			expect( browserHash.verifyChallengeHash( challenge + '!' , browserResult.counter , browserResult.hash  , challengeParams) ).not.to.be.ok() ;
+
+			let nodeResult = hash.computeChallengeHash( challenge , challengeParams ) ;
+			console.log( "Node results:" , nodeResult ) ;
+			expect( nodeResult ).to.equal( browserResult ) ;
+			expect( hash.verifyChallengeHash( challenge , browserResult.counter , browserResult.hash , challengeParams ) ).to.be.ok() ;
+			expect( browserHash.verifyChallengeHash( challenge , nodeResult.counter , nodeResult.hash , challengeParams ) ).to.be.ok() ;
+		} ) ;
+	} ) ;
 } ) ;
 

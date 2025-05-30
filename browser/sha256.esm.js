@@ -7,7 +7,7 @@
  * @license MIT
  */
 /*
-	Modified by Cédric Ronvel : turn into an ESM module, add Uint8Array output.
+	Modified by Cédric Ronvel : turn into an ESM module, turn off Node.js detection, add Uint8Array output, e.g.: sha256.uint8Array(data)
 */
 'use strict';
 
@@ -19,6 +19,7 @@ if (root.JS_SHA256_NO_WINDOW) {
 }
 var WEB_WORKER = !WINDOW && typeof self === 'object';
 var NODE_JS = !root.JS_SHA256_NO_NODE_JS && typeof process === 'object' && process.versions && process.versions.node && process.type != 'renderer';
+NODE_JS = false ;	// CR: force false, because it's now an ESM Module and it would cause troubles
 if (NODE_JS) {
   root = global;
 } else if (WEB_WORKER) {

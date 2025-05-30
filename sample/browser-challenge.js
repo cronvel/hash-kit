@@ -1,6 +1,6 @@
 
-import { default as hashNative } from '../lib/browser-challenge.mjs' ; 
-import { default as hashJs } from '../lib/browser-challenge-ext-sha256.mjs' ; 
+import { default as hashNative } from '../browser/challenge-webcrypto.mjs' ; 
+import { default as hashJs } from '../browser/challenge-sha256.mjs' ; 
 //import { sha256 } from '../external/sha256.esm.js' ; 
 //console.log( "sha256:" , sha256 ) ;
 
@@ -15,7 +15,7 @@ const ready = callback => {
 
 
 const CHALLENGE_PARAMS = {
-	zeroes: 18 ,
+	zeroes: 20 ,
 	encoding: 'base64url' ,
 	algo: 'sha256' ,
 	joint: ':',
@@ -55,13 +55,13 @@ async function test() {
 
 async function test2() {
 	for ( let i = 0 ; i < 10 ; i ++ ) {
-		await challengeNative( "random" + Math.random() ) ;
+		await challengeJs( "random" + Math.random() ) ;
 	}
 }
 
 
 
-ready( test ) ;
-//ready( test2 ) ;
+//ready( test ) ;
+ready( test2 ) ;
 
 
