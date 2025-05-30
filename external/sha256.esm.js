@@ -6,7 +6,9 @@
  * @copyright Chen, Yi-Cyuan 2014-2025
  * @license MIT
  */
-/*jslint bitwise: true */
+/*
+	Modified by Cédric Ronvel : turn into an ESM module, add Uint8Array output.
+*/
 'use strict';
 
 var ERROR = 'input is invalid type';
@@ -38,7 +40,7 @@ var K = [
   0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,
   0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2
 ];
-var OUTPUT_TYPES = ['hex', 'array', 'digest', 'arrayBuffer'];
+var OUTPUT_TYPES = ['hex', 'array', 'uint8Array', 'digest', 'arrayBuffer'];
 
 var blocks = [];
 
@@ -414,6 +416,29 @@ Sha256.prototype.digest = function () {
 };
 
 Sha256.prototype.array = Sha256.prototype.digest;
+
+// CR: add Uint8Array support
+Sha256.prototype.uint8Array = function () {
+	this.finalize() ;
+
+	var array = this.is224 ? new Uint8Array( 28 ) : new Uint8Array( 32 ) ,
+		h0 = this.h0 , h1 = this.h1 , h2 = this.h2 , h3 = this.h3 ,
+		h4 = this.h4 , h5 = this.h5 , h6 = this.h6 , h7 = this.h7 ;
+
+	array[ 0 ] = (h0 >>> 24) & 0xFF ; array[ 1 ] = (h0 >>> 16) & 0xFF ; array[ 2 ] = (h0 >>> 8) & 0xFF ; array[ 3 ] = h0 & 0xFF ;
+	array[ 4 ] = (h1 >>> 24) & 0xFF ; array[ 5 ] = (h1 >>> 16) & 0xFF ; array[ 6 ] = (h1 >>> 8) & 0xFF ; array[ 7 ] = h1 & 0xFF ;
+	array[ 8 ] = (h2 >>> 24) & 0xFF ; array[ 9 ] = (h2 >>> 16) & 0xFF ; array[ 10 ] = (h2 >>> 8) & 0xFF ; array[ 11 ] = h2 & 0xFF ;
+	array[ 12 ] = (h3 >>> 24) & 0xFF ; array[ 13 ] = (h3 >>> 16) & 0xFF ; array[ 14 ] = (h3 >>> 8) & 0xFF ; array[ 15 ] = h3 & 0xFF ;
+	array[ 16 ] = (h4 >>> 24) & 0xFF ; array[ 17 ] = (h4 >>> 16) & 0xFF ; array[ 18 ] = (h4 >>> 8) & 0xFF ; array[ 19 ] = h4 & 0xFF ;
+	array[ 20 ] = (h5 >>> 24) & 0xFF ; array[ 21 ] = (h5 >>> 16) & 0xFF ; array[ 22 ] = (h5 >>> 8) & 0xFF ; array[ 23 ] = h5 & 0xFF ;
+	array[ 24 ] = (h6 >>> 24) & 0xFF ; array[ 25 ] = (h6 >>> 16) & 0xFF ; array[ 26 ] = (h6 >>> 8) & 0xFF ; array[ 27 ] = h6 & 0xFF ;
+
+	if ( ! this.is224 ) {
+		array[ 28 ] = (h7 >>> 24) & 0xFF ; array[ 29 ] = (h7 >>> 16) & 0xFF ; array[ 30 ] = (h7 >>> 8) & 0xFF ; array[ 31 ] = h7 & 0xFF ;
+	}
+
+	return array;
+} ;
 
 Sha256.prototype.arrayBuffer = function () {
   this.finalize();
