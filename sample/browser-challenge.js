@@ -1,7 +1,8 @@
 
 import { default as hash } from '../lib/browser-challenge.mjs' ; 
+import { sha256 } from '../external/sha256.esm.js' ; 
 
-
+console.log( "sha256:" , sha256 ) ;
 
 // Like jQuery's $(document).ready()
 const ready = callback => {
@@ -46,7 +47,7 @@ async function test2() {
 
 
 
-//ready( test ) ;
-ready( test2 ) ;
+ready( test ) ;
+//ready( test2 ) ;
 
 
