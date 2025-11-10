@@ -257,3 +257,24 @@ describe( "random string" , () => {
 	} ) ;
 } ) ;
 
+
+
+describe( "DRNG: Deterministic Random Number Generator)" , () => {
+
+	it( "test .bufferToUInt32()" ) ;
+	it( "test ._bitLeftRotation32()" ) ;
+
+	it( "should create deterministic random numbers" , () => {
+		var seed , topic , counter = 0 , number ;
+
+		//seed = hash.randomBase64( 16 ) ;
+		seed = 'StU19TualGT8xgBiMekYDg' ;
+		topic = "player:bob,type:battle" ;
+		
+		for ( ; counter < 5 ; counter ++ ) {
+			number = hash.deterministicRandom( seed , topic , counter ) ;
+			console.log( "Results:" , { seed , topic , counter , number } ) ;
+		}
+	} ) ;
+} ) ;
+
