@@ -265,16 +265,53 @@ describe( "DRNG: Deterministic Random Number Generator)" , () => {
 	it( "test ._bitLeftRotation32()" ) ;
 
 	it( "should create deterministic random numbers" , () => {
-		var seed , topic , counter = 0 , number ;
+		var seed , topic , counter = 0 ;
 
-		//seed = hash.randomBase64( 16 ) ;
 		seed = 'StU19TualGT8xgBiMekYDg' ;
+		seed = hash.randomBase64( 16 ) ;
 		topic = "player:bob,type:battle" ;
 		
 		for ( ; counter < 5 ; counter ++ ) {
-			number = hash.deterministicRandom( seed , topic , counter ) ;
-			console.log( "Results:" , { seed , topic , counter , number } ) ;
+			let uint32 = hash.deterministicRandomUInt32( seed , topic , counter ) ;
+			let float = hash.deterministicRandom( seed , topic , counter ) ;
+			let integer = hash.deterministicRandomInt( seed , topic , counter , 100 ) ;
+			console.log( "Results:" , { seed , topic , counter , uint32 , float , integer } ) ;
 		}
+
+		var array = [] ;
+		var occurencies = new Array( 100 ).fill( 0 ) ;
+		for ( counter = 0 ; counter < 100000 ; counter ++ ) {
+			let integer = hash.deterministicRandomInt( seed , topic , counter , 100 ) ;
+			occurencies[ integer ] ++ ;
+			array.push( integer ) ;
+		}
+		//console.log( "Results:" , array ) ;
+		console.log( "Occurencies:" , occurencies ) ;
+	} ) ;
+
+	it( "using hash.DRNG class" , () => {
+		var topic ,
+			rng = new hash.DRNG() ;
+
+		topic = "player:bob,type:battle" ;
+		
+		for ( let i = 0 ; i < 5 ; i ++ ) {
+			let float = rng.random( topic ) ;
+			let integer = rng.randomInt( topic , 100 ) ;
+			console.log( "Results:" , { topic , float , integer } ) ;
+		}
+		//return ;
+
+		var array = [] ;
+		var occurencies = new Array( 100 ).fill( 0 ) ;
+		for ( let i = 0 ; i < 100000 ; i ++ ) {
+			let integer = rng.randomInt( topic , 100 ) ;
+			occurencies[ integer ] ++ ;
+			array.push( integer ) ;
+		}
+		//console.log( "Results:" , array ) ;
+		console.log( "Occurencies:" , occurencies ) ;
+		console.log( "DRNG:" , rng ) ;
 	} ) ;
 } ) ;
 
