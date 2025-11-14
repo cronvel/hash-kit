@@ -313,5 +313,18 @@ describe( "DRNG: Deterministic Random Number Generator)" , () => {
 		console.log( "Occurencies:" , occurencies ) ;
 		console.log( "DRNG:" , rng ) ;
 	} ) ;
+
+	it( "using hash.DRNG class, get fixed random number for a topic" , () => {
+		var topic ,
+			rng = new hash.DRNG() ;
+
+		topic = "player:bob,type:battle" ;
+
+		for ( let i = 0 ; i < 3 ; i ++ ) {
+			let float = rng.fixedRandom( topic ) ;
+			let integer = rng.fixedRandomInt( topic , 100 ) ;
+			console.log( "Results:" , { topic , float , integer } ) ;
+		}
+	} ) ;
 } ) ;
 

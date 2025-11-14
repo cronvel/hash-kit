@@ -1,6 +1,6 @@
 {
   "name": "hash-kit",
-  "version": "0.3.13",
+  "version": "0.3.14",
   "description": "A hash creation toolkit.",
   "main": "lib/hash.js",
   "engines": {
